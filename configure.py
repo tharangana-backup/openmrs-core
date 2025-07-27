@@ -13,16 +13,6 @@ logging.basicConfig(filename=LOG_FILE, level=LOG_LEVEL, format='%(asctime)s - %(
 # GitHub Auth
 g = Github(GITHUB_TOKEN)
 repo = g.get_repo(REPO_NAME)
-
-def fetch_issues():
-    logging.info("Fetching issues...")
-    issues = repo.get_issues(state='all', since=START_DATE)
-    result = []
-    for issue in issues:
-        if issue.created_at.isoformat() > END_DATE:
-            continue
-        if issue.pull_request:
-            continue  # Skip PRs
         result.append(issue.raw_data)
         if len(result) >= PER_PAGE * MAX_PAGES:
             break
