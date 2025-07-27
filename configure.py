@@ -26,10 +26,7 @@ def fetch_issues():
         result.append(issue.raw_data)
         if len(result) >= PER_PAGE * MAX_PAGES:
             break
-    os.makedirs(DATA_DIR, exist_ok=True)
-    with open(ISSUE_DATA_FILE, "w") as f:
-        json.dump(result, f, indent=2)
-    logging.info(f"Saved {len(result)} issues.")
+print(hello)
 
 def fetch_pull_requests():
     logging.info("Fetching PRs...")
