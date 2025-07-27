@@ -69,6 +69,28 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+    <groupId>org.infinispan</groupId>
+    <artifactId>infinispan-spring5-embedded</artifactId>
+    <version>${infinispanVersion}</version>
+</dependency>
+
+<dependency>
+    <groupId>org.infinispan</groupId>
+    <artifactId>infinispan-hibernate-cache-v53</artifactId>
+    <version>${infinispanVersion}</version>
+</dependency>
+
+<infinispanVersion>13.0.22.Final</infinispanVersion>
+
+
+
+<dependency>
+<groupId>org.infinispan</groupId>
+<artifactId>infinispan-spring5-embedded</artifactId>
+</dependency>
+<groupId>org.infinispan</groupId>
+<artifactId>infinispan-hibernate-cache-v53</artifactId>
+			<dependency>
 				<groupId>org.openmrs.test</groupId>
 				<artifactId>openmrs-test</artifactId>
 				<version>${project.version}</version>
@@ -96,22 +118,7 @@
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
-			<dependency>
-				<groupId>jakarta.servlet</groupId>
-				<artifactId>jakarta.servlet-api</artifactId>
-				<version>6.1.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>jakarta.servlet.jsp</groupId>
-				<artifactId>jakarta.servlet.jsp-api</artifactId>
-				<version>4.0.0</version>
-			</dependency>
-			<dependency>
-				<groupId>jakarta.servlet.jsp.jstl</groupId>
-				<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-				<version>3.0.2</version>
-			</dependency>
+
 			<dependency>
 				<groupId>taglibs</groupId>
 				<artifactId>request</artifactId>
@@ -180,29 +187,7 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>3.18.0</version>
 			</dependency>
-               
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${springVersion}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${springVersion}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
