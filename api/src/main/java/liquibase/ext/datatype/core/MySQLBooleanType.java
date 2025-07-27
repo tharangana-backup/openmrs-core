@@ -47,4 +47,9 @@ public class MySQLBooleanType extends BooleanType {
 	public int getPriority() {
 		return super.getPriority() + 1;
 	}
+	@Override
+	public String getName() {
+    	return "mysql-boolean";
+}
+
 }
