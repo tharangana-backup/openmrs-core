@@ -16,6 +16,15 @@ import liquibase.change.core.InsertDataChange;
 import liquibase.database.Database;
 import liquibase.statement.SqlStatement;
 import liquibase.structure.core.Column;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
+import java.util.concurrent.TimeUnit;
+import org.hibernate.Cache;
+import org.hibernate.CacheMode;
+import org.hibernate.cache.internal.EnabledCaching;
+import org.hibernate.stat.EntityStatistics;
+import org.infinispan.manager.EmbeddedCacheManager;
+import org.junit.Ignore;
+import org.springframework.test.context.transaction.TestTransaction;
 
 import static java.util.UUID.randomUUID;
 
@@ -529,6 +538,28 @@ import org.hibernate.stat.EntityStatistics;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.junit.Ignore;
 import org.springframework.test.context.transaction.TestTransaction;
+// Entities are not put in cache until transaction is committed thus running non-transactional test
+TestTransaction.flagForCommit();
+TestTransaction.end();
+await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_2));
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_8));
+});
+TestTransaction.flagForCommit();
+TestTransaction.end();
+await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_2));
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_8));
+assertTrue(sf.getCache().containsEntity(Patient.class, PERSON_NAME_ID_2));
+});
+TestTransaction.flagForCommit();
+TestTransaction.end();
+await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_2));
+assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_8));
+assertTrue(sf.getCache().containsEntity(Patient.class, PERSON_NAME_ID_2));
+});
+
 // Entities are not put in cache until transaction is committed thus running non-transactional test
 TestTransaction.flagForCommit();
 TestTransaction.end();
