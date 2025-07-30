@@ -43,11 +43,6 @@ public class MySQLBooleanType extends BooleanType {
 		return super.toDatabaseDataType(database);
 	}
 
-	<dependency>
-    <groupId>org.infinispan</groupId>
-    <artifactId>infinispan-spring5-embedded</artifactId>
-    <version>${infinispanVersion}</version>
-</dependency>
 
 <dependency>
     <groupId>org.infinispan</groupId>
