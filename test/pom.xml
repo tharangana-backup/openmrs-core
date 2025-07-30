@@ -16,10 +16,7 @@
 
    </parent>
    <modelVersion>4.0.0</modelVersion>
-   <groupId>org.openmrs.test</groupId>
-   <artifactId>openmrs-test</artifactId>
-   <packaging>pom</packaging>
-   <name>openmrs-test</name>
+
    <description>The test dependencies for openmrs</description>
    <dependencies>
       <dependency>
