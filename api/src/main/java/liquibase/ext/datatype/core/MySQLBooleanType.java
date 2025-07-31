@@ -82,59 +82,7 @@ the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
 Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
 graphic logo is a trademark of OpenMRS Inc.
 -->
-<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="urn:infinispan:config:13.0 https://infinispan.org/schemas/infinispan-config-13.0.xsd"
-xmlns="urn:infinispan:config:13.0">>
-<cache-container>
-<local-cache-configuration name="entity" simple-cache="true" statistics="false" statistics-available="false">
-<encoding media-type="application/x-java-object"/>
-<transaction mode="NONE" />
-<expiration max-idle="100000" interval="5000"/>
-<memory max-count="10000"/>
-</local-cache-configuration>
-</cache-container>
-</infinispan>
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-This Source Code Form is subject to the terms of the Mozilla Public License,
-v. 2.0. If a copy of the MPL was not distributed with this file, You can
-obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
-the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
-Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
-graphic logo is a trademark of OpenMRS Inc.
--->
-<infinispan
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="urn:infinispan:config:13.0 https://infinispan.org/schemas/infinispan-config-13.0.xsd"
-xmlns="urn:infinispan:config:13.0">
-<jgroups>
-<stack-file name="api-jgroups" path="${hibernate.cache.infinispan.jgroups_cfg:default-configs/default-jgroups-tcp.xml}"/>
-</jgroups>
-<cache-container>
-<transport stack="api-jgroups" cluster="infinispan-api-cluster"/>
-<!-- Default configuration is appropriate for entity/collection caching. -->
-<invalidation-cache-configuration name="entity" remote-timeout="20000" statistics="false" statistics-available="false">
-<encoding media-type="application/x-java-object"/>
-<locking concurrency-level="1000" acquire-timeout="15000"/>
-<transaction mode="NONE" />
-<expiration max-idle="100000" interval="5000"/>
-<memory max-count="10000"/>
-</invalidation-cache-configuration>
-</cache-container>
-</infinispan>
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.notNullValue;
-SimpleKey key = new SimpleKey("wgt234", "sstrm", true);
-assertThat(cache.get(key), is(nullValue()));
-List<Integer> conceptIdsByMapping = conceptService.getConceptIdsByMapping("wgt234", "sstrm", true);
-assertThat(cache.get(key).get(), is(conceptIdsByMapping));
-SimpleKey cacheKey = new SimpleKey(crt.getCode(), cs.getHl7Code(), true);
-List<Integer> conceptIdsByMapping = conceptService.getConceptIdsByMapping(crt.getCode(), cs.getHl7Code(), true);
-assertThat(cache.get(cacheKey).get(), is(conceptIdsByMapping));
-assertThat(cache.get(cacheKey), is(nullValue()));
-conceptIdsByMapping = conceptService.getConceptIdsByMapping(crt.getCode(), cs.getHl7Code(), true);
-assertThat(cache.get(cacheKey).get(), is(conceptIdsByMapping));
-assertThat(cache.get(cacheKey), is(nullValue()));
+
 conceptIdsByMapping = conceptService.getConceptIdsByMapping(crt.getCode(), cs.getHl7Code(), true);
 assertThat(cache.get(cacheKey).get(), is(conceptIdsByMapping));
 assertThat(cache.get(cacheKey), is(nullValue()));
