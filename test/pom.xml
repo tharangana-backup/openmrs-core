@@ -126,11 +126,7 @@
     <version>${infinispanVersion}</version>
 </dependency>
 
-<dependency>
-    <groupId>org.infinispan</groupId>
-    <artifactId>infinispan-hibernate-cache-v53</artifactId>
-    <version>${infinispanVersion}</version>
-</dependency>
+
 
 <infinispanVersion>13.0.22.Final</infinispanVersion>
 
