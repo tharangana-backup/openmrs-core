@@ -503,6 +503,75 @@ assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_2));
 assertTrue(sf.getCache().containsEntity(PERSON_NAME_CLASS, PERSON_NAME_ID_8));
 assertTrue(sf.getCache().containsEntity(Patient.class, PERSON_NAME_ID_2));
 });
+ParserRegistry parser = new ParserRegistry();
+ConfigurationBuilderHolder baseConfigBuilder = parser.parseFile(cacheConfig);
+// Determine cache type based on loaded template for "entity"
+String cacheType = baseConfigBuilder.getNamedConfigurationBuilders().get("entity").build().elementName();
+cacheType = StringUtils.removeEnd(cacheType, "-configuration");
+cacheType = CaseUtils.toCamelCase(cacheType, false, '-');
+DumperOptions options = new DumperOptions();
+options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+options.setPrettyFlow(true);
+Yaml yaml = new Yaml(options);
+for (URL configFile : getCacheConfigurations()) {
+// Apply cache type for caches using the 'entity' template
+// and add the 'infinispan.cacheContainer.caches' parent
+InputStream fullConfig = buildFullConfig(yaml, configFile, cacheType);
+ConfigurationBuilderHolder configBuilder = parser.parse(fullConfig, baseConfigBuilder, null,
+MediaType.APPLICATION_YAML);
+// Merge cache definitions into baseConfigBuilder
+configBuilder.getNamedConfigurationBuilders().forEach((name, builder) -> {
+baseConfigBuilder.getNamedConfigurationBuilders().put(name, builder);
+});
+}
+DefaultCacheManager cacheManager = new DefaultCacheManager(baseConfigBuilder, true);
+return new SpringEmbeddedCacheManager(cacheManager);
+}
+private static InputStream buildFullConfig(Yaml yaml, URL configFile, String cacheType) throws IOException {
+Map<String, Object> loadedConfig = yaml.load(configFile.openStream());
+Map<String, Object> config = new LinkedHashMap<>();
+Map<String, Object> cacheContainer = new LinkedHashMap<>();
+Map<String, Object> caches = new LinkedHashMap<>();
+Map<String, Object> cacheList = new LinkedHashMap<>();
+config.put("infinispan", cacheContainer);
+cacheContainer.put("cacheContainer", caches);
+caches.put("caches", cacheList);
+@SuppressWarnings("unchecked")
+Map<String, Object> loadedCaches = (Map<String, Object>) loadedConfig.get("caches");
+for (Map.Entry<String, Object> entry : loadedCaches.entrySet()) {
+@SuppressWarnings("unchecked")
+Map<String, Object> value = (Map<String, Object>) entry.getValue();
+if ("entity".equals(value.get("configuration"))) {
+Map<Object, Object> cache = new LinkedHashMap<>();
+cache.put(cacheType, value);
+cacheList.put(entry.getKey(), cache);
+} else {
+cacheList.put(entry.getKey(), value);
+}
+}
+String configDump = yaml.dump(config);
+return new ByteArrayInputStream(configDump.getBytes(StandardCharsets.UTF_8));
+}
+public List<URL> getCacheConfigurations() {
+Resource[] configResources;
+try {
+ResourcePatternResolver patternResolver = new PathMatchingResourcePatternResolver();
+configResources = patternResolver.getResources("classpath*:cache-api.yaml");
+} catch (IOException e) {
+throw new IllegalStateException("Unable to find cache configurations", e);
+}
+List<URL> files = new ArrayList<>();
+for (Resource configResource : configResources) {
+try {
+URL file = configResource.getURL();
+files.add(file);
+} catch (IOException e) {
+log.error("Failed to get cache config file: {}", configResource, e);
+}
+}
+return files;
+}
+
 TestTransaction.flagForCommit();
 TestTransaction.end();
 await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {

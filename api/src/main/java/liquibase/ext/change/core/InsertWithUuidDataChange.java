@@ -778,6 +778,85 @@ xmlns="urn:infinispan:config:13.0">>
 </cache-container>
 </infinispan>
 <?xml version="1.0" encoding="utf-8"?>
+<groupId>org.infinispan</groupId>
+<artifactId>infinispan-hibernate-cache-v53</artifactId>
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+import javax.persistence.Cacheable;
+@Cacheable
+
+java
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.CaseUtils;
+import org.infinispan.commons.dataconversion.MediaType;
+import org.infinispan.configuration.parsing.ConfigurationBuilderHolder;
+import org.infinispan.configuration.parsing.ParserRegistry;
+import org.infinispan.manager.DefaultCacheManager;
+import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.spring.embedded.provider.SpringEmbeddedCacheManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+* CacheConfig provides a cache manager for the @Cacheable annotation and uses Infinispan under the hood.
+* The config of Infinispan is loaded from infinispan-api-local.xml/infinispan-api.xml and can be customized by
+* providing a different file through the cache_config property. It is expected for the config to contain a template
+* named "entity" to be used to create caches.
+* <p>
+* Caches can be added by modules through a cache-api.yaml file in the classpath.
+* The file shall contain only the <b>caches</b> element as defined in Infinispan docs at
+* <a href="https://infinispan.org/docs/13.0.x/titles/configuring/configuring.html#multiple_caches">multiple caches</a>
+* <p>
+* Please note the underlying implementation changed from ehcache to Infinispan since 2.8.x
+* to support replicated/distributed caches.
+private static Logger log = LoggerFactory.getLogger(CacheConfig.class);
+@Value("${cache_type:local}")
+private String cacheType;
+@Value("${cache_config:}")
+private String cacheConfig;
+@Bean(name = "apiCacheManager")
+public SpringEmbeddedCacheManager apiCacheManager() throws IOException {
+if (StringUtils.isBlank(cacheConfig)) {
+String local = "local".equalsIgnoreCase(cacheType.trim()) ? "-local" : "";
+cacheConfig = "infinispan-api" + local + ".xml";
+}
+
 
 
 
