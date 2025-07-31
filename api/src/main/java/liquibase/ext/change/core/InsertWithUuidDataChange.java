@@ -850,11 +850,7 @@ private static Logger log = LoggerFactory.getLogger(CacheConfig.class);
 private String cacheType;
 @Value("${cache_config:}")
 private String cacheConfig;
-@Bean(name = "apiCacheManager")
-public SpringEmbeddedCacheManager apiCacheManager() throws IOException {
-if (StringUtils.isBlank(cacheConfig)) {
-String local = "local".equalsIgnoreCase(cacheType.trim()) ? "-local" : "";
-cacheConfig = "infinispan-api" + local + ".xml";
+
 }
 
 

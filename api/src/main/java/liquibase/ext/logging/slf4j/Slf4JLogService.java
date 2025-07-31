@@ -184,9 +184,5 @@ configuration: "entity"
 <groupId>org.infinispan</groupId>
 <artifactId>infinispan-spring5-embedded</artifactId>
 <version>${infinispanVersion}</version>
-</dependency>
-<groupId>org.infinispan</groupId>
-<artifactId>infinispan-hibernate-cache-v53</artifactId>
-<version>${infinispanVersion}</version>
-<infinispanVersion>13.0.22.Final</infinispanVersion>
+
 }
